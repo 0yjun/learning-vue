@@ -4,29 +4,38 @@
     <span class="addContainer" v-on:click="addTodo">
       <i class="fa-solid fa-plus addBtn"></i>
     </span>
+    <Modal v-if="showModal" @close="showModal = false">
+     <h3 slot="header">경고</h3>
+     <h3 slot="body">입력하시오</h3>
+     <h3 slot="footer">닫기</h3>
+    </Modal>
   </div>
 </template>
 
 <script>
 
+import Modal from './common/Modal.vue'
 export default {
-  name: 'TodoInput',
   data :function(){
-    return {newTodoItem : ''}
+    return {newTodoItem : '',showModal : false}
   },
   methods:{
     addTodo : function(){
       if(this.newTodoItem !==''){
-        let obj = {complement : false, item: this.newTodoItem};
-        localStorage.setItem(this.newTodoItem,JSON.stringify(obj));
+        this.$emit('addTodoItem',this.newTodoItem);
         this.clearInput();
+      }else{
+        console.log('thisshowmodal',this.showModal)
+        this.showModal = !this.showModal;
       }
      
     },
     clearInput : function(){
       this.newTodoItem = '';
-    }
-  }
+    },
+    
+  },components : {Modal : Modal}
+
 
 }
 </script>
@@ -36,7 +45,7 @@ export default {
     outline: none;
   }
   .inputBox{
-    background: white;
+   
     height: 50px;
     line-height:50px;
     border-radius:5px;
